@@ -1,0 +1,26 @@
+{
+  "name": "minix",
+  "version": "1.0.0",
+  "description": "**A tiny reactive UI library that pairs with [htmx](https://htmx.org).** No build step, no dependencies, ~150 lines, ~2KB minified.",
+  "main": "minix.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbertoDePena/minix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AlbertoDePena/minix/issues"
+  },
+  "homepage": "https://github.com/AlbertoDePena/minix#readme",
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.9"
+  }
+}

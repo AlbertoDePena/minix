@@ -14,7 +14,16 @@ minix is a tiny (~150 lines, ~2KB minified) reactive UI library designed to pair
 
 ## Development
 
-There is no build step, package manager, test suite, or linter. To develop, open `index.html` in a browser (or use a local HTTP server) and edit `minix.js` directly.
+No build step or linter. To develop, open `index.html` in a browser (or use a local HTTP server) and edit `minix.js` directly.
+
+## Testing
+
+```bash
+npm test            # run all tests once
+npm run test:watch  # watch mode
+```
+
+Tests use vitest with jsdom (created manually per test, not via vitest environment). The IIFE auto-starts on import and marks `document.body` in an internal `seen` WeakSet, so tests create a fresh JSDOM + re-require `minix.js` (busting Node's require cache) in `beforeEach` to reset that state. The `mount()` helper appends a container `<div>` to body and calls `MiniX.start()` on it.
 
 ## Architecture
 
