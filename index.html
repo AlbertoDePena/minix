@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>minix demo</title>
+    <style>
+        body {
+            font: 16px/1.5 system-ui, sans-serif;
+            max-width: 640px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #1a1a1a;
+        }
+
+        section {
+            border: 1px solid #e3e3e3;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+
+        h2 {
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: #888;
+            margin: 0 0 12px;
+        }
+
+        button {
+            font: inherit;
+            padding: 6px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #f5f5f5;
+        }
+
+        input {
+            font: inherit;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        .modal {
+            margin-top: 12px;
+            padding: 14px;
+            background: #f0f7ff;
+            border: 1px solid #cfe3ff;
+            border-radius: 8px;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            background: #eee;
+        }
+
+        .pill.on {
+            background: #d6f5d6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>minix + htmx</h1>
+
+    <!-- Counter: local reactive state + computed text -->
+    <section mx-state="{ count: 0 }">
+        <h2>Counter (mx-state, mx-on:click, mx-text)</h2>
+        <button mx-on:click="count--">−</button>
+        <span mx-text="count" style="margin: 0 10px; font-weight: 600;"></span>
+        <button mx-on:click="count++">+</button>
+    </section>
+
+    <!-- Toggle / modal: mx-show with no server round trip -->
+    <section mx-state="{ open: false }">
+        <h2>Toggle (mx-show, mx-bind:class)</h2>
+        <button mx-on:click="open = !open" mx-bind:class="{ on: open }" mx-text="open ? 'Hide' : 'Show'"></button>
+        <span class="pill" mx-bind:class="{ on: open }" mx-text="open ? 'visible' : 'hidden'"
+            style="margin-left:10px;"></span>
+        <div class="modal" mx-show="open">This panel toggles entirely client-side — no request.</div>
+    </section>
+
+    <!-- Live input: mx-model two-way binding -->
+    <section mx-state="{ name: '' }">
+        <h2>Live input (mx-model, mx-text)</h2>
+        <input mx-model="name" placeholder="Type your name">
+        <p>Hello, <strong mx-text="name || 'stranger'"></strong>.</p>
+    </section>
+
+    <!-- The pairing pattern (needs a server to actually fetch):
+       state lives on a parent htmx never replaces; htmx swaps a child.
+
+  <section mx-state="{ loading: false }"
+           mx-on:htmx:before-request="loading = true"
+           mx-on:htmx:after-request="loading = false">
+    <h2>minix state + htmx fetch</h2>
+    <button hx-get="/fragment" hx-target="#out" hx-swap="innerHTML"
+            mx-bind:disabled="loading" mx-text="loading ? 'Loading…' : 'Load from server'"></button>
+    <div id="out"><!-- htmx swaps server HTML here; minix state above survives --></div>
+    </section>
+    -->
+
+    <!-- htmx (loaded first so its htmx:load event exists) -->
+    <script src="https://unpkg.com/htmx.org@2"></script>
+    <script src="./minix.js"></script>
+</body>
+
+</html>
